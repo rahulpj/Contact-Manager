@@ -1,7 +1,33 @@
-<div class="parent-fragment" th:fragment="parent(content)">
-  <h1>This is parent fragment</h1>
-  <p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, inventore!
-  </p>
-  <div th:replace="${content}"></div>
-</div>
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  th:fragment="parent(content,title,script)"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:replace="${title}">Base Page</title>
+    <link rel="stylesheet" data-th-href="@{'/CSS/output.css'}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- common header  -->
+
+    <ul>
+      <li><a data-th-href="@{'/home'}">Home</a></li>
+      <li><a data-th-href="@{'/services'}">Services</a></li>
+      <li><a data-th-href="@{'/about'}">About</a></li>
+    </ul>
+
+    <!-- main content -->
+    <section th:replace="${content}"></section>
+    <!-- flowbite content  -->
+    <!-- common footer    -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <th:block data-th-replace="${script}"></th:block>
+  </body>
+</html>

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About</title>
-  </head>
+<html
+  lang="en"
+  th:replace="~{base:: parent(~{::#content},~{::title},~{::script})}"
+>
+  <title>About Page</title>
+  <head> </head>
   <body>
-    <h1>about</h1>
-    <hr />
-    <div th:replace="~{base::parent(~{::.one})}">
-      <section class="one">This is one content</section>
-      <section id="two">This is second content</section>
-    </div>
+    <section id="content">
+      <h1>welcome to about page</h1>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
+        facere.
+      </p>
+    </section>
+    <script>
+      console.log("about page");
+    </script>
   </body>
 </html>
