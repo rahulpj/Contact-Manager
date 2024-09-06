@@ -3,6 +3,7 @@ package com.contactmanager.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -22,6 +23,8 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 public class User {
+
+    
     @Id
     private String userId;
     @Column(name = "user_name",nullable = false)
@@ -39,7 +42,8 @@ public class User {
     private boolean phoneVerified=false;
 
     // SELF , GOOGLE , GITHUB
-    @Enumerated
+    
+    @Enumerated(value = EnumType.STRING)
     private Providers provider=Providers.SELF;
     private String providerUserId;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)

@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.contactmanager.entities.User;
 import com.contactmanager.forms.UserForm;
+import com.contactmanager.helpers.Message;
+import com.contactmanager.helpers.MessageType;
 import com.contactmanager.services.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
@@ -74,7 +78,7 @@ public class PageController {
 
     // register processing
     @PostMapping("/do-register")
-    public String registerProcessing(@ModelAttribute UserForm userForm){
+    public String registerProcessing(@ModelAttribute UserForm userForm,HttpSession session){
         System.out.println("Proccesing registration");
         // fetch data
         //userForm
@@ -87,19 +91,35 @@ public class PageController {
         // save to db
         // userService
         // UserForm --> User
-        User user = User.builder()
-        .name(userForm.getName())
-        .email(userForm.getEmail())
-        .password(userForm.getPassword())
-        .about(userForm.getAbout())
-        .phoneNumber(userForm.getPhoneNumber())
-        .profilePic("")
-        .build();
+        
+        // User user = User.builder()
+        // .name(userForm.getName())
+        // .email(userForm.getEmail())
+        // .password(userForm.getPassword())
+        // .about(userForm.getAbout())
+        // .phoneNumber(userForm.getPhoneNumber())
+        // .profilePic("")
+        // .build();
+
+        User user = new User();
+        user.setName(userForm.getName());
+        user.setEmail(userForm.getEmail());
+        user.setPassword(userForm.getPassword());
+        user.setAbout(userForm.getAbout());
+        user.setPhoneNumber(userForm.getPhoneNumber());
+        user.setProfilePic("");
+
 
         User savedUser = userService.saveUser(user);
         System.out.println("User Saved");
         
         // message 
+        // Message message = Message.builder().content("registration successful").type(MessageType.green).build();
+        Message message = new Message();
+        message.setContent("Registration Successful");
+        
+        session.setAttribute("message",message);
+
         // redirect to login page
 
 
