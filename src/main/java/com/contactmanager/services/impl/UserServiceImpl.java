@@ -3,14 +3,18 @@ package com.contactmanager.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.UUID;  
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.contactmanager.entities.User;
+import com.contactmanager.helpers.ResourceNotFoundException;
 import com.contactmanager.repositories.UserRepo;
 import com.contactmanager.services.UserService;
 
+@Service
 public class UserServiceImpl implements UserService{
 
 
@@ -25,6 +29,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
+        // user id need to be generate automatically
+        String userId = UUID.randomUUID().toString();
+        user.setUserId(userId);
         return userRepo.save(user);
     }
 
@@ -35,32 +42,45 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUser(User user) {
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+    public Optional<User> updateUser(User user) {
+        User user2=userRepo.findById(user.getUserId()).orElseThrow(()-> new ResourceNotFoundException());
+        user2.setName(user.getName());
+        user2.setEmail(user.getEmail());
+        user2.setPhoneNumber(user.getPhoneNumber());
+        user2.setAbout(user.getAbout());
+        user2.setPassword(user.getPassword());
+        user2.setProfilePic(user.getProfilePic());
+        user2.setEnabled(user.isEnabled());
+        user2.setEmailVerified(user.isEmailVerified());
+        user2.setPhoneVerified(user.isPhoneVerified());
+        user2.setProvider(user.getProvider());
+        user2.setProviderUserId(user.getProviderUserId());
+        User save = userRepo.save(user2);
+        return Optional.ofNullable(save);
     }
 
     @Override
     public void deleteUser(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+        User user2 = userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("User Not Found"));
+         userRepo.delete(user2);
     }
 
     @Override
     public boolean isUserExist(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExist'");
+        User user2 = userRepo.findById(id).orElse(null);
+        if(user2==null) return false;
+        return true;    
     }
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExistByEmail'");
+       User user2 = userRepo.findByEmail(email).orElse(null);
+       return user2!=null ? true : false;
     }
 
     @Override
     public List<User> getAllUsers() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+        return userRepo.findAll();    
     }
 
 

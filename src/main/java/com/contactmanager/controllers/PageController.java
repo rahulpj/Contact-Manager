@@ -1,15 +1,28 @@
 package com.contactmanager.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.contactmanager.entities.User;
 import com.contactmanager.forms.UserForm;
+import com.contactmanager.services.UserService;
 
 @Controller
 public class PageController {
+
+    // Constructor Injection
+    private  UserService userService;
+    @Autowired
+    public PageController(UserService userService){
+        this.userService=userService;
+    }
+
+
+
     @RequestMapping("/home")
     public String home(){
         return "home";
@@ -63,16 +76,28 @@ public class PageController {
     @PostMapping("/do-register")
     public String registerProcessing(@ModelAttribute UserForm userForm){
         System.out.println("Proccesing registration");
-        System.out.println(userForm);
         // fetch data
         //userForm
+        System.out.println(userForm);
 
 
         // validate it
 
 
         // save to db
-        
+        // userService
+        // UserForm --> User
+        User user = User.builder()
+        .name(userForm.getName())
+        .email(userForm.getEmail())
+        .password(userForm.getPassword())
+        .about(userForm.getAbout())
+        .phoneNumber(userForm.getPhoneNumber())
+        .profilePic("")
+        .build();
+
+        User savedUser = userService.saveUser(user);
+        System.out.println("User Saved");
         
         // message 
         // redirect to login page
