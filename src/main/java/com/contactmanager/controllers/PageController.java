@@ -3,6 +3,7 @@ package com.contactmanager.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.contactmanager.helpers.MessageType;
 import com.contactmanager.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class PageController {
@@ -78,12 +80,14 @@ public class PageController {
 
     // register processing
     @PostMapping("/do-register")
-    public String registerProcessing(@ModelAttribute UserForm userForm,HttpSession session){
+    public String registerProcessing(@Valid @ModelAttribute UserForm userForm,BindingResult rBindingResult,HttpSession session){
         System.out.println("Proccesing registration");
         // fetch data
         //userForm
         System.out.println(userForm);
-
+        if(rBindingResult.hasErrors()){ 
+            return "register";
+        }
 
         // validate it
 
