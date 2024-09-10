@@ -7,9 +7,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.contactmanager.entities.User;
+import com.contactmanager.helpers.AppConstatnts;
 import com.contactmanager.helpers.ResourceNotFoundException;
 import com.contactmanager.repositories.UserRepo;
 import com.contactmanager.services.UserService;
@@ -17,6 +19,8 @@ import com.contactmanager.services.UserService;
 @Service
 public class UserServiceImpl implements UserService{
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     // Constructor injection
     private final UserRepo userRepo;
@@ -32,6 +36,14 @@ public class UserServiceImpl implements UserService{
         // user id need to be generate automatically
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
+        // password encode 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // set the user role
+
+        user.setRoleList(List.of(AppConstatnts.ROLE_USER));
+
+
         return userRepo.save(user);
     }
 
