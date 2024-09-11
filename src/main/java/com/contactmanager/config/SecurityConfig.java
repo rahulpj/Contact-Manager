@@ -19,6 +19,9 @@ import com.contactmanager.services.impl.SecurityCustomUserDetailService;
 public class SecurityConfig {
 
     @Autowired
+    OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
+
+    @Autowired
     SecurityCustomUserDetailService securityCustomUserDetailService;
 
     // Configuration of Authentication Provider
@@ -58,6 +61,13 @@ public class SecurityConfig {
         httpSecurity.logout(logoutForm->{
             logoutForm.logoutUrl("/logout");
             logoutForm.logoutSuccessUrl("/login?logout=true");
+        });
+
+        // oauth configurations
+
+        httpSecurity.oauth2Login(oauth->{
+            oauth.loginPage("/login");
+            oauth.successHandler(oAuthAuthenticationSuccessHandler);
         });
 
         return httpSecurity.build();
